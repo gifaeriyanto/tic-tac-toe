@@ -1,5 +1,5 @@
 import React from 'react';
-import { Win } from 'containers';
+import Win from 'containers/win';
 import { NextPage } from 'next';
 
 const Index: NextPage = () => {

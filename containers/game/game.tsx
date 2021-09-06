@@ -38,11 +38,9 @@ const Game: React.FC = () => {
     }
 
     if (winner) {
-      // Router.push('/win/' + winner);
-      console.log('win', winner);
+      Router.push('/win/' + winner);
     } else if (!winner && isBoardFull()) {
-      console.log('draw');
-      // Router.push('/win/draw');
+      Router.push('/win/draw');
     }
   };
 

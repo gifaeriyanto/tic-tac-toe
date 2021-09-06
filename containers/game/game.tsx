@@ -10,14 +10,14 @@ const Game: React.FC = () => {
   const [boxs, setBoxs] = useState(initialBox);
   const [isX, setIsX] = useState(true);
 
-  const isBoardFull = (boxs: TValue[]) => {
+  const isBoardFull = () => {
     if (boxs.indexOf(null) === -1) {
       return true;
     }
     return false;
   };
 
-  const calculateWinner = (boxs: TValue[]) => {
+  const calculateWinner = async () => {
     const winValue = [
       [0, 1, 2],
       [3, 4, 5],
@@ -29,22 +29,25 @@ const Game: React.FC = () => {
       [2, 4, 6],
     ];
 
-    winValue.forEach((item) => {
+    let winner = null;
+    for await (const item of winValue) {
       const [a, b, c] = item;
       if (boxs[a] && boxs[a] === boxs[b] && boxs[a] === boxs[c]) {
-        Router.push('/win/' + boxs[a]);
-      } else {
-        if (isBoardFull(boxs)) {
-          Router.push('/win/draw');
-        }
+        winner = boxs[a];
       }
-    });
+    }
 
-    return null;
+    if (winner) {
+      // Router.push('/win/' + winner);
+      console.log('win', winner);
+    } else if (!winner && isBoardFull()) {
+      console.log('draw');
+      // Router.push('/win/draw');
+    }
   };
 
   useEffect(() => {
-    calculateWinner(boxs);
+    calculateWinner();
   }, [boxs]);
 
   const renderSquare = (i: number) => {

@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Box } from 'components';
 import { Row, Board } from './game.styled';
 import Router from 'next/router';
+import { TValue } from 'components/box/box.types';
 
 const Game: React.FC = () => {
-  const initialBox = Array(9).fill(null);
+  const initialBox: TValue[] = Array(9).fill(null);
 
   const [boxs, setBoxs] = useState(initialBox);
   const [isX, setIsX] = useState(true);
 
-  const isBoardFull = boxs => {
+  const isBoardFull = (boxs: TValue[]) => {
     if (boxs.indexOf(null) === -1) {
-      Router.push('/win/draw');
+      return true;
     }
+    return false;
   };
 
-  const calculateWinner = boxs => {
+  const calculateWinner = (boxs: TValue[]) => {
     const winValue = [
       [0, 1, 2],
       [3, 4, 5],
@@ -27,19 +29,22 @@ const Game: React.FC = () => {
       [2, 4, 6],
     ];
 
-    for (let i = 0; i < winValue.length; i++) {
-      const [a, b, c] = winValue[i];
+    winValue.forEach((item) => {
+      const [a, b, c] = item;
       if (boxs[a] && boxs[a] === boxs[b] && boxs[a] === boxs[c]) {
         Router.push('/win/' + boxs[a]);
+      } else {
+        if (isBoardFull(boxs)) {
+          Router.push('/win/draw');
+        }
       }
-    }
+    });
 
     return null;
   };
 
   useEffect(() => {
     calculateWinner(boxs);
-    isBoardFull(boxs);
   }, [boxs]);
 
   const renderSquare = (i: number) => {
